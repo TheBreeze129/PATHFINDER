@@ -35,7 +35,7 @@ app.add_middleware(
 )
 
 # Supabase 연결 설정
-SIGNALING_SERVER_URL = "wss://"+os.environ.get('SIG_SERVER_IP')+os.environ.get('SIG_SERVER_PORT')  # 시그널링 서버 URL
+SIGNALING_SERVER_URL = "wss://"+os.environ.get('SIG_SERVER_IP')+':'+os.environ.get('SIG_SERVER_PORT')  # 시그널링 서버 URL
 SUPABASE_URL = os.environ.get('SUPABASE_URL')
 SUPABASE_KEY = os.environ.get('SUPABASE_KEY')
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
