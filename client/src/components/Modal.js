@@ -16,7 +16,7 @@ const Modal = ({ teacherId, roomId, onClose }) => {
 
     try {
       const response = await axios.post(
-        'https://192.168.0.2:3456/chat/getlogs',
+        'https://' + process.env.REACT_APP_BASE_URL + '/api/v1/getlogs',
         {
           roomId: roomId,
         },

@@ -27,7 +27,7 @@ const Modal_Report = ({
 
     try {
       const response = await axios.post(
-        'https://192.168.0.2:3456/reports',
+        'https://' + process.env.REACT_APP_BASE_URL + '/api/v1/reports',
         {
           teacherName: teacherName,
           studentName: studentName,
