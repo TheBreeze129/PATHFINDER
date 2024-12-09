@@ -108,14 +108,9 @@ async def handler(websocket, path):
                     del rooms[room_id]
                     print(f"Room {room_id} deleted")
 
-# SSL 설정
-ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
-ssl_context.load_cert_chain(certfile=os.environ.get(
-    'CERTFILE'), keyfile=os.environ.get('KEYFILE'))
-
 # WebSocket 서버 시작 (wss://)
 start_server = websockets.serve(handler, os.environ.get(
-    'SIG_SERVER_IP'), int(os.environ.get('SIG_SERVER_PORT')), ssl=ssl_context)
+    'SIG_SERVER_IP'), int(os.environ.get('SIG_SERVER_PORT')))
 print("Secure WebSocket (WSS) server running on port" +
       os.environ.get('SIG_SERVER_PORT'))
 
