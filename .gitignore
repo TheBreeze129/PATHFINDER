@@ -1,0 +1,32 @@
+# Node.js 의존성
+client/node_modules/
+
+# Python 캐시 파일
+server/**/__pycache__/
+signalingserver/**/__pycache__/
+voiceserver/**/__pycache__/
+
+# 환경 변수 파일
+client/.env
+server/mainserver/.env
+server/signalingserver/.env
+server/voiceserver/.env
+
+# 인증서 및 키 파일
+client/server.cert
+client/server.key
+server/mainserver/server.cert
+server/mainserver/server.key
+server/signalingserver/server.cert
+server/signalingserver/server.key
+server/voiceserver/server.cert
+server/voiceserver/server.key
+
+# 업로드된 파일
+server/voiceserver/uploads/
+server/voiceserver/uploaded/
+
+# 기타 시스템 파일
+.DS_Store
+Thumbs.db
+*.log
