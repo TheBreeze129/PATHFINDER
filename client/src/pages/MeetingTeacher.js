@@ -237,14 +237,17 @@ const MeetingTeacher = () => {
     formData.append('audio', blob, fileName); // 생성된 파일 이름 사용
 
     try {
-      const response = await fetch('https://' + VoiceServer + '/upload', {
-        method: 'POST',
-        body: formData,
+      const response = await fetch(
+        'https://' + VoiceServer + '/api/v2/upload',
+        {
+          method: 'POST',
+          body: formData,
 
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('accessToken')}`, // 헤더 설정
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('accessToken')}`, // 헤더 설정
+          },
         },
-      });
+      );
       console.log('오디오가 성공적으로 전송되었습니다:', response);
     } catch (error) {
       console.error('오디오 전송 오류:', error);
@@ -288,7 +291,7 @@ const MeetingTeacher = () => {
     if (!roomId) return;
 
     const setupWebSocket = () => {
-      webSocket.current = new WebSocket('wss://' + SigServer);
+      webSocket.current = new WebSocket('wss://' + SigServer + '/signal/');
 
       webSocket.current.onopen = () => {
         console.log('Connected to signaling server');
@@ -438,7 +441,7 @@ const MeetingTeacher = () => {
 
     try {
       const response = await axios.post(
-        'https://' + MainServer + '/endmeeting',
+        'https://' + MainServer + '/api/v1/end',
         {
           roomId: roomId,
           teacherName: localStorage.getItem('userName'),
@@ -486,7 +489,7 @@ const MeetingTeacher = () => {
 
     try {
       const response = await axios.post(
-        'https://' + MainServer + '/recommendations',
+        'https://' + MainServer + '/api/v1/recommendations',
         {
           teacherName: window.localStorage.getItem('userName'),
           studentName: window.localStorage.getItem('stdName'),

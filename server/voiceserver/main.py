@@ -31,7 +31,7 @@ UPLOAD_DIR = "uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 
-@app.post("/upload")
+@app.post("/api/v2/upload")
 async def upload_audio(audio: UploadFile = File(...), token: str = Depends(oauth2_scheme)):
     try:
         # 고유한 파일 이름 생성하여 충돌 방지
@@ -68,7 +68,7 @@ async def upload_audio(audio: UploadFile = File(...), token: str = Depends(oauth
         try:
             response = requests.post(
                 # 백엔드 URL
-                f"https://{os.environ.get('MAIN_SERVER_IP')}:{os.environ.get('MAIN_SERVER_PORT')}/chat/log",
+                f"https://{os.environ.get('MAIN_SERVER_IP')}:{os.environ.get('MAIN_SERVER_PORT')}/api/v1/chatlog",
                 json={
                     "recognized_text": recognized_text,  # 인식된 텍스트
                     "filename": audio.filename         # 원본 파일 이름

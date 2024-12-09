@@ -17,7 +17,7 @@ const LoginTeacher = () => {
     try {
       // 백엔드 API 호출
       const response = await axios.post(
-        'https://' + MainServer + '/users/login',
+        'https://' + MainServer + '/api/v1/login',
         {
           username: userID,
           password: userPW,

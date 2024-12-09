@@ -70,7 +70,7 @@ def create_access_token(user_id: str):
 # API Endpoints
 
 
-@app.post("/users/signup")
+@app.post("/api/v1/signup")
 def signup(user: UserSignup):
     """회원가입"""
     # Check if username or email already exists
@@ -102,7 +102,7 @@ def signup(user: UserSignup):
     raise HTTPException(status_code=500, detail="Unknown error occurred")
 
 
-@app.post("/users/login", response_model=dict)
+@app.post("/api/v1/login", response_model=dict)
 def login(user: UserLogin):
     """로그인"""
     # Fetch user by username
@@ -119,7 +119,7 @@ def login(user: UserLogin):
     return {"access_token": access_token, "token_type": "bearer"}
 
 
-@app.get("/users/me")
+@app.get("/api/v1/userinfo")
 def get_user_info(token: str = Depends(oauth2_scheme)):
     try:
         # JWT 디코딩
@@ -151,7 +151,7 @@ def get_user_info(token: str = Depends(oauth2_scheme)):
         raise HTTPException(status_code=500, detail="Internal server error")
 
 
-@app.get("/conferences")
+@app.get("/api/v1/conferences")
 def get_conferences(token: str = Depends(oauth2_scheme)):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
@@ -171,7 +171,7 @@ def get_conferences(token: str = Depends(oauth2_scheme)):
     return response.data
 
 
-@app.post("/chat/getlogs")
+@app.post("/api/v1/getlogs")
 def get_chaglogs(data: ChatInfo, token: str = Depends(oauth2_scheme)):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
@@ -190,7 +190,7 @@ def get_chaglogs(data: ChatInfo, token: str = Depends(oauth2_scheme)):
     return response.data
 
 
-@app.post("/rooms")
+@app.post("/api/v1/rooms")
 async def create_room():
     try:
         print("Creating room")
@@ -220,7 +220,7 @@ async def create_room():
             status_code=500, detail=f"Error connecting to signaling server: {e}")
 
 
-@app.post("/room/info")
+@app.post("/api/v1/roominfo")
 async def roominfo(data: RoomInfo, token: str = Depends(oauth2_scheme)):
     """
     JWT 토큰에서 teacher_id를 추출하고 conference_logs 테이블에 데이터 삽입.
@@ -260,7 +260,7 @@ async def roominfo(data: RoomInfo, token: str = Depends(oauth2_scheme)):
         raise HTTPException(status_code=500, detail="Internal server error")
 
 
-@app.post("/chat/log")
+@app.post("/api/v1/chatlog")
 def chat_log(data: RecognizedData, token: str = Depends(oauth2_scheme)):
     # 파일명에서 정보 추출
     talkertype, roomId, startdate, starttime = data.filename.split(".")[0].split("_")
@@ -310,7 +310,7 @@ def chat_log(data: RecognizedData, token: str = Depends(oauth2_scheme)):
         raise HTTPException(status_code=500, detail="Internal server error")
 
 
-@app.post("/endmeeting")
+@app.post("/api/v1/end")
 def endmeeting(data: ReportBase, token: str = Depends(oauth2_scheme)):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
@@ -360,7 +360,7 @@ def endmeeting(data: ReportBase, token: str = Depends(oauth2_scheme)):
     return {"message": "Successfully"}
 
 
-@app.post("/recommendations")
+@app.post("/api/v1/recommendations")
 async def recommend(data: ReportBase, token: str = Depends(oauth2_scheme)):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
@@ -410,7 +410,7 @@ async def recommend(data: ReportBase, token: str = Depends(oauth2_scheme)):
         raise HTTPException(
             status_code=500, detail="ChatGPT Not Working...")
 
-@app.post("/reports")
+@app.post("/api/v1/reports")
 async def reports(data: ReportBase, token: str = Depends(oauth2_scheme)):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])

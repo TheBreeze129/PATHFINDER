@@ -28,7 +28,7 @@ const SignUp = () => {
     try {
       // 회원가입 API 요청
       const response = await axios.post(
-        'https://' + MainServer + '/users/signup',
+        'https://' + MainServer + '/api/v1/signup',
         {
           username: userID,
           email: userEmail,

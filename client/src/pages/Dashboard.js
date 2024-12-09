@@ -58,7 +58,7 @@ const Dashboard = () => {
         }
         // 1. 사용자 정보 가져오기
         const userResponse = await axios.get(
-          'https://' + MainServer + '/users/me',
+          'https://' + MainServer + '/api/v1/userinfo',
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
@@ -73,7 +73,7 @@ const Dashboard = () => {
 
         // 2. 회의 데이터 가져오기
         const conferenceResponse = await axios.get(
-          'https://' + MainServer + '/conferences',
+          'https://' + MainServer + '/api/v1/conferences',
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem('accessToken')}`,

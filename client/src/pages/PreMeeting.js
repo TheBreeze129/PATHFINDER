@@ -17,7 +17,9 @@ const PreMeeting = () => {
 
   const startNewMeeting = async () => {
     try {
-      const response = await axios.post('https://' + MainServer + '/rooms');
+      const response = await axios.post(
+        'https://' + MainServer + '/api/v1/rooms',
+      );
       console.log(response.data);
       setroomID(response.data['room_id']);
     } catch (error) {
@@ -72,7 +74,7 @@ const PreMeeting = () => {
             } else if (!isButtonDisabled) {
               try {
                 const response = await axios.post(
-                  'https://' + MainServer + '/room/info',
+                  'https://' + MainServer + '/api/v1/roominfo',
 
                   {
                     room_id: roomID,
