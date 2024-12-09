@@ -3,11 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios'; // Axios 사용
 
-const MainServer =
-  process.env.REACT_APP_MAIN_SERVER_IP +
-  ':' +
-  process.env.REACT_APP_MAIN_SERVER_PORT;
-
 const SignUp = () => {
   const navigate = useNavigate();
   const [userID, setuserID] = useState('');
@@ -28,7 +23,7 @@ const SignUp = () => {
     try {
       // 회원가입 API 요청
       const response = await axios.post(
-        'https://' + MainServer + '/api/v1/signup',
+        'https://' + process.env.REACT_APP_BASE_URL + '/api/v1/signup',
         {
           username: userID,
           email: userEmail,

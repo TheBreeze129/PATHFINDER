@@ -7,16 +7,6 @@ import { ReactComponent as Quit_v } from '../assets/svgs/quit.svg';
 import { useNavigate, useLocation } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
 
-const SigServer =
-  process.env.REACT_APP_SIG_SERVER_IP +
-  ':' +
-  process.env.REACT_APP_SIG_SERVER_PORT;
-
-const VoiceServer =
-  process.env.REACT_APP_VOICE_SERVER_IP +
-  ':' +
-  process.env.REACT_APP_VOICE_SERVER_PORT;
-
 // 음량 임계값 설정
 const VOLUME_START_THRESHOLD = 30; // 녹음 시작 임계값
 const VOLUME_STOP_THRESHOLD = 20; // 녹음 중지 임계값
@@ -223,7 +213,7 @@ const MeetingStudent = () => {
 
     try {
       const response = await fetch(
-        'https://' + VoiceServer + '/api/v2/upload',
+        'https://' + process.env.REACT_APP_BASE_URL + '/api/v2/upload',
         {
           method: 'POST',
           body: formData,
@@ -275,7 +265,9 @@ const MeetingStudent = () => {
     if (!roomId) return;
 
     const setupWebSocket = () => {
-      webSocket.current = new WebSocket('wss://' + SigServer + '/signal/');
+      webSocket.current = new WebSocket(
+        'wss://' + process.env.REACT_APP_BASE_URL + '/signal/',
+      );
 
       webSocket.current.onopen = () => {
         //console.log('Connected to signaling server');

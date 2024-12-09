@@ -9,21 +9,6 @@ import styled, { keyframes } from 'styled-components';
 import axios from 'axios'; // Axios로 백엔드 API 호출
 import * as faceapi from 'face-api.js';
 
-const MainServer =
-  process.env.REACT_APP_MAIN_SERVER_IP +
-  ':' +
-  process.env.REACT_APP_MAIN_SERVER_PORT;
-
-const SigServer =
-  process.env.REACT_APP_SIG_SERVER_IP +
-  ':' +
-  process.env.REACT_APP_SIG_SERVER_PORT;
-
-const VoiceServer =
-  process.env.REACT_APP_VOICE_SERVER_IP +
-  ':' +
-  process.env.REACT_APP_VOICE_SERVER_PORT;
-
 // 음량 임계값 설정
 const VOLUME_START_THRESHOLD = 30; // 녹음 시작 임계값
 const VOLUME_STOP_THRESHOLD = 20; // 녹음 중지 임계값
@@ -238,7 +223,7 @@ const MeetingTeacher = () => {
 
     try {
       const response = await fetch(
-        'https://' + VoiceServer + '/api/v2/upload',
+        'https://' + process.env.REACT_APP_BASE_URL + '/api/v2/upload',
         {
           method: 'POST',
           body: formData,
@@ -291,7 +276,9 @@ const MeetingTeacher = () => {
     if (!roomId) return;
 
     const setupWebSocket = () => {
-      webSocket.current = new WebSocket('wss://' + SigServer + '/signal/');
+      webSocket.current = new WebSocket(
+        'wss://' + process.env.REACT_APP_BASE_URL + '/signal/',
+      );
 
       webSocket.current.onopen = () => {
         console.log('Connected to signaling server');
@@ -441,7 +428,7 @@ const MeetingTeacher = () => {
 
     try {
       const response = await axios.post(
-        'https://' + MainServer + '/api/v1/end',
+        'https://' + process.env.REACT_APP_BASE_URL + '/api/v1/end',
         {
           roomId: roomId,
           teacherName: localStorage.getItem('userName'),
@@ -489,7 +476,7 @@ const MeetingTeacher = () => {
 
     try {
       const response = await axios.post(
-        'https://' + MainServer + '/api/v1/recommendations',
+        'https://' + process.env.REACT_APP_BASE_URL + '/api/v1/recommendations',
         {
           teacherName: window.localStorage.getItem('userName'),
           studentName: window.localStorage.getItem('stdName'),

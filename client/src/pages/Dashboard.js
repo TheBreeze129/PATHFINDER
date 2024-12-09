@@ -6,11 +6,6 @@ import Modal_Report from '../components/Modal_Report';
 import axios from 'axios'; // Axios로 백엔드 API 호출
 import { useNavigate } from 'react-router-dom';
 
-const MainServer =
-  process.env.REACT_APP_MAIN_SERVER_IP +
-  ':' +
-  process.env.REACT_APP_MAIN_SERVER_PORT;
-
 const Dashboard = () => {
   const [isChatOpen, setIsChatOpen] = useState(false); // 모달 열림 상태
   const [isReportOpen, setIsReportOpen] = useState(false); //
@@ -58,7 +53,7 @@ const Dashboard = () => {
         }
         // 1. 사용자 정보 가져오기
         const userResponse = await axios.get(
-          'https://' + MainServer + '/api/v1/userinfo',
+          'https://' + process.env.REACT_APP_BASE_URL + '/api/v1/userinfo',
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
@@ -73,7 +68,7 @@ const Dashboard = () => {
 
         // 2. 회의 데이터 가져오기
         const conferenceResponse = await axios.get(
-          'https://' + MainServer + '/api/v1/conferences',
+          'https://' + process.env.REACT_APP_BASE_URL + '/api/v1/conferences',
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem('accessToken')}`,

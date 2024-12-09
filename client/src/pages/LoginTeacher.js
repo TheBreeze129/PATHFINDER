@@ -2,11 +2,6 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios'; // Axios를 이용해 백엔드와 통신
-
-const MainServer =
-  process.env.REACT_APP_MAIN_SERVER_IP +
-  ':' +
-  process.env.REACT_APP_MAIN_SERVER_PORT;
 const LoginTeacher = () => {
   const navigate = useNavigate();
   const [userID, setUserID] = useState('');
@@ -17,7 +12,7 @@ const LoginTeacher = () => {
     try {
       // 백엔드 API 호출
       const response = await axios.post(
-        'https://' + MainServer + '/api/v1/login',
+        'https://' + process.env.REACT_APP_BASE_URL + '/api/v1/login',
         {
           username: userID,
           password: userPW,

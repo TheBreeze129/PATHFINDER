@@ -3,11 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios'; // Axios를 이용해 백엔드와 통신
 
-const MainServer =
-  process.env.REACT_APP_MAIN_SERVER_IP +
-  ':' +
-  process.env.REACT_APP_MAIN_SERVER_PORT;
-
 const PreMeeting = () => {
   const navigate = useNavigate();
   const [roomID, setroomID] = useState('NGDIFW');
@@ -18,7 +13,7 @@ const PreMeeting = () => {
   const startNewMeeting = async () => {
     try {
       const response = await axios.post(
-        'https://' + MainServer + '/api/v1/rooms',
+        'https://' + process.env.REACT_APP_BASE_URL + '/api/v1/rooms',
       );
       console.log(response.data);
       setroomID(response.data['room_id']);
@@ -74,7 +69,9 @@ const PreMeeting = () => {
             } else if (!isButtonDisabled) {
               try {
                 const response = await axios.post(
-                  'https://' + MainServer + '/api/v1/roominfo',
+                  'https://' +
+                    process.env.REACT_APP_BASE_URL +
+                    '/api/v1/roominfo',
 
                   {
                     room_id: roomID,
