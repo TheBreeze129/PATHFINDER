@@ -194,11 +194,8 @@ def get_chaglogs(data: ChatInfo, token: str = Depends(oauth2_scheme)):
 async def create_room():
     try:
         print("Creating room")
-        ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
-        ssl_context.check_hostname = False
-        ssl_context.verify_mode = ssl.CERT_NONE
-
-        async with websockets.connect(SIGNALING_SERVER_URL, ssl=ssl_context) as websocket:
+    
+        async with websockets.connect(SIGNALING_SERVER_URL) as websocket:
             # 방 생성 요청
             create_request = json.dumps({"action": "create_room"})
             print(create_request)
