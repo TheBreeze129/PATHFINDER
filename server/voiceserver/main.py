@@ -68,7 +68,7 @@ async def upload_audio(audio: UploadFile = File(...), token: str = Depends(oauth
         try:
             response = requests.post(
                 # 백엔드 URL
-                f"https://{os.environ.get('MAIN_SERVER_IP')}:{os.environ.get('MAIN_SERVER_PORT')}/api/v1/chatlog",
+                f"http://{os.environ.get('MAIN_SERVER_IP')}:{os.environ.get('MAIN_SERVER_PORT')}/api/v1/chatlog",
                 json={
                     "recognized_text": recognized_text,  # 인식된 텍스트
                     "filename": audio.filename         # 원본 파일 이름
