@@ -28,14 +28,17 @@ app = FastAPI()
 # CORS 설정
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=os.environ.get('CORS_ALLOW_ORIGIN').split(','),  # 클라이언트 URL을 여기에 추가
+    allow_origins=os.environ.get('CORS_ALLOW_ORIGIN').split(
+        ','),  # 클라이언트 URL을 여기에 추가
     allow_credentials=True,
     allow_methods=["*"],  # 모든 HTTP 메서드 허용 (GET, POST 등)
     allow_headers=["*"],  # 모든 HTTP 헤더 허용
 )
 
 # Supabase 연결 설정
-SIGNALING_SERVER_URL = "ws://"+os.environ.get('SIG_SERVER_IP')+':'+os.environ.get('SIG_SERVER_PORT')  # 시그널링 서버 URL
+SIGNALING_SERVER_URL = "ws://" + \
+    os.environ.get('SIG_SERVER_IP')+':' + \
+    os.environ.get('SIG_SERVER_PORT')  # 시그널링 서버 URL
 SUPABASE_URL = os.environ.get('SUPABASE_URL')
 SUPABASE_KEY = os.environ.get('SUPABASE_KEY')
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
@@ -46,7 +49,9 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 # JWT 설정
 SECRET_KEY = os.environ.get('SECRET_KEY')
 ALGORITHM = os.environ.get('ALGORITHM')
-ACCESS_TOKEN_EXPIRE_MINUTES = int(os.environ.get('ACCESS_TOKEN_EXPIRE_MINUTES'))
+ACCESS_TOKEN_EXPIRE_MINUTES = int(
+    os.environ.get('ACCESS_TOKEN_EXPIRE_MINUTES'))
+
 
 def hash_password(password: str) -> str:
     """비밀번호 해시 생성"""
@@ -260,23 +265,24 @@ async def roominfo(data: RoomInfo, token: str = Depends(oauth2_scheme)):
 @app.post("/api/v1/chatlog")
 def chat_log(data: RecognizedData, token: str = Depends(oauth2_scheme)):
     # 파일명에서 정보 추출
-    talkertype, roomId, startdate, starttime = data.filename.split(".")[0].split("_")
+    talkertype, roomId, startdate, starttime = data.filename.split(".")[
+        0].split("_")
     try:
         # JWT 토큰 디코딩 및 검증
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         teacher_id = payload.get("sub")
-        
 
         # UUID 유효성 검증
         teacher_uuid = UUID(teacher_id)
 
     except (JWTError, ValueError) as e:
-        teacher = supabase.table("conference_logs").select("teacher_id").eq("roomId",roomId).order("created_at", desc=True).execute()
+        teacher = supabase.table("conference_logs").select("teacher_id").eq(
+            "roomId", roomId).order("created_at", desc=True).execute()
         teacher_id = teacher.data[0]['teacher_id']
         teacher_uuid = UUID(teacher_id)
 
     try:
-        
+
         dt_object = datetime.strptime(
             f"{startdate}_{starttime}", "%Y%m%d_%H%M%S")
         formatted_datetime = dt_object.strftime("%Y-%m-%d %H:%M:%S")
@@ -325,7 +331,8 @@ def endmeeting(data: ReportBase, token: str = Depends(oauth2_scheme)):
         raise HTTPException(
             status_code=500, detail="Failed to fetch conference logs")
 
-    chatdata = "\n".join([f"발화자 : {data.teacherName if x['talker']==1 else data.studentName} / 내용 : {x['text']} / 시간 : {x['startat']}" for x in response.data])
+    chatdata = "\n".join(
+        [f"발화자 : {data.teacherName if x['talker']==1 else data.studentName} / 내용 : {x['text']} / 시간 : {x['startat']}" for x in response.data])
 
     try:
         completion = chatgpt.chat.completions.create(
@@ -375,7 +382,8 @@ async def recommend(data: ReportBase, token: str = Depends(oauth2_scheme)):
         raise HTTPException(
             status_code=500, detail="Failed to fetch conference logs")
 
-    chatdata = [['T' if x['talker']==1 else 'S', x['text']] for x in response.data]
+    chatdata = [['T' if x['talker'] == 1 else 'S', x['text']]
+                for x in response.data]
     temp_prev = 0
     todel = []
     for i in range(len(chatdata)-1):
@@ -398,7 +406,7 @@ async def recommend(data: ReportBase, token: str = Depends(oauth2_scheme)):
     print(chatdata[-5:])
     try:
         completion = chatgpt.chat.completions.create(
-            model="gpt-4o-mini",
+            model="ft:gpt-4o-mini-2024-07-18:personal:hsver2:AW7mRKCh",
             messages=messages
         )
         result = completion.choices[0].message.content
@@ -406,6 +414,7 @@ async def recommend(data: ReportBase, token: str = Depends(oauth2_scheme)):
     except:
         raise HTTPException(
             status_code=500, detail="ChatGPT Not Working...")
+
 
 @app.post("/api/v1/reports")
 async def reports(data: ReportBase, token: str = Depends(oauth2_scheme)):
@@ -425,7 +434,8 @@ async def reports(data: ReportBase, token: str = Depends(oauth2_scheme)):
         raise HTTPException(
             status_code=500, detail="Failed to fetch conference logs")
 
-    chatdata = "\n".join([f"발화자 : {data.teacherName if x['talker']==1 else data.studentName} / 내용 : {x['text']} / 시간 : {x['startat']}" for x in response.data])
+    chatdata = "\n".join(
+        [f"발화자 : {data.teacherName if x['talker']==1 else data.studentName} / 내용 : {x['text']} / 시간 : {x['startat']}" for x in response.data])
 
     try:
         print(chatdata)
